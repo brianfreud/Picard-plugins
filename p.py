@@ -3,22 +3,28 @@
 # Based on:
 # http://www.unicode.org/Public/UNIDATA/Scripts.txt
 # http://www.evertype.com/standards/csur/index.html
+# http://www.kreativekorp.com/ucsur/
 
 # History
-# Version 0.1    Initial version
-# Version 0.2.1  First public release (2011-03-18)
+# Version 0.1       2011-01-??:  Initial version
+# Version 0.2.1  2011-03-18: First public release
+# Version 0.3      2012-04-09: Recovered and rereleased to the public, after the original distribution links broke and I lost the master file. Huge
+#                               thanks to kccourier!  Updated to include Unicode 6.1.0 additions to Arabic, Armenian, Coptic, Cyrillic, Georgian, Gujarati, Han, 
+#                               Lao, Latin, Meetei Mayek, Sundanese, Tifinagh, and Vedic.  Added support for Amlin, Chakma, Glaitha-A, Glaitha-B, Lhenazi, 
+#                               Miao, Sharada, Sora Sompeng, Takri, as well as Picard v. 0.16.  Changed the result for non-script accents and extensions from 
+#                               "inherited" to "noscript".
 
 PLUGIN_NAME = '$p'
 PLUGIN_AUTHOR = 'Brian Schweitzer'
-PLUGIN_DESCRIPTION = ''
-PLUGIN_VERSION = "0.2.1"
-PLUGIN_API_VERSIONS = ["0.12", "0.13", "0.14", "0.15"]
+PLUGIN_DESCRIPTION = 'Identifies the script of a grapheme.  Essentially, this does the inverse of a \p{M} regular expression.'
+PLUGIN_VERSION = "0.3"
+PLUGIN_API_VERSIONS = ["0.12", "0.13", "0.14", "0.15", "0.16"]
 
 from picard.script import register_script_function
 import re
 
 scripts = {
-    'scripts' : ["latin","cyrillic","aiha","alzetjan","ammaniar","arabic","armenian","aui","avestan","balinese","bamum","batak","bengali","bopomofo","brahmi","braille","buginese","buhid","canadianaboriginal","carian","cham","cherokee","cirth","coptic","cuneiform","cypriot","deseret","devanagari","egyptianhieroglyphs","engsvanyali","ethiopic","ewellic","ferengi","gargoyle","georgian","glagolitic","gothic","greek","gujarati","gurmukhi","han","hangul","hanunoo","hebrew","hiragana","ilianore","imperialaramaic","inherited","inscriptionalpahlavi","inscriptionalparthian","javanese","kaithi","kannada","katakana","kayahli","kazatakkorou","kazvarad","kelwathi","kharoshthi","khmer","kinya","klingon","lao","lepcha","limbu","linearb","lisu","lycian","lydian","malayalam","mandaic","meeteimayek","mizarian","mongolian","monofon","myanmar","newtailue","niskloz","nko","ogham","olaetyan","olchiki","olditalic","oldpersian","oldsoutharabian","oldturkic","ophidian","oriya","osmanya","phagspa","phoenician","pikto","rejang","rozhxh","runic","rynnan","saklor","samaritan","sarkai","saurashtra","serivelna","seussian","shavian","sinhala","solresol","ssuraki","streich","sundanese","syai","sylotinagri","syriac","tagalog","tagbanwa","taile","taitham","taiviet","tamil","telarasso","telugu","tengwar","thaana","thai","thelwik","tibetan","tifinagh","ugaritic","unifon","vai","verdurian","visiblespeech","xaini","yi","zarkhand","zirinka"],
+    'scripts' : ["latin","cyrillic","aiha","alzetjan","ammaniar","arabic","armenian","aui","avestan","balinese","bamum","batak","bengali","bopomofo","brahmi","braille","buginese","buhid","canadianaboriginal","carian","cham","cherokee","cirth","coptic","cuneiform","cypriot","deseret","devanagari","egyptianhieroglyphs","engsvanyali","ethiopic","ewellic","ferengi","gargoyle","georgian","glagolitic","gothic","greek","gujarati","gurmukhi","han","hangul","hanunoo","hebrew","hiragana","ilianore","imperialaramaic","noscript","inscriptionalpahlavi","inscriptionalparthian","javanese","kaithi","kannada","katakana","kayahli","kazatakkorou","kazvarad","kelwathi","kharoshthi","khmer","kinya","klingon","lao","lepcha","limbu","linearb","lisu","lycian","lydian","malayalam","mandaic","meeteimayek","mizarian","mongolian","monofon","myanmar","newtailue","niskloz","nko","ogham","olaetyan","olchiki","olditalic","oldpersian","oldsoutharabian","oldturkic","ophidian","oriya","osmanya","phagspa","phoenician","pikto","rejang","rozhxh","runic","rynnan","saklor","samaritan","sarkai","saurashtra","serivelna","seussian","shavian","sinhala","solresol","ssuraki","streich","sundanese","syai","sylotinagri","syriac","tagalog","tagbanwa","taile","taitham","taiviet","tamil","telarasso","telugu","tengwar","thaana","thai","thelwik","tibetan","tifinagh","ugaritic","unifon","vai","verdurian","visiblespeech","xaini","yi","zarkhand","zirinka","amlin","chakma","glaithaa","glaithab","lhenazi","meroitic","miao","sharada","sorasompeng","takri"],
     'aiha' : {
                 'name'  : u"Aiha",
                 'official' : False,
@@ -27,6 +33,10 @@ scripts = {
                 'name'  : u"Alzetjan",
                 'official' : False,
                 'regex' : re.compile(ur"[\uE550-\uE57F]")},
+    'amlin' : {
+                'name'  : u"Amlin",
+                'official' : False,
+                'regex' : re.compile(ur"[\uE6D0-\uE6EF]")},
     'ammaniar' : {
                 'name'  : u"Amman-Iar",
                 'official' : False,
@@ -34,11 +44,11 @@ scripts = {
     'arabic' : {
                 'name'  : u"Arabic",
                 'official' : True,
-                'regex' : re.compile(ur"[\u0600-\u0603\u0606-\u0608\u0609-\u060A\u060B\u060D\u060E-\u060F\u0610-\u061A\u061E\u0620-\u063F\u0641-\u064A\u0656-\u065E\u066A-\u066D\u066E-\u066F\u0671-\u06D3\u06D4\u06D5\u06D6-\u06DC\u06DE\u06DF-\u06E4\u06E5-\u06E6\u06E7-\u06E8\u06E9\u06EA-\u06ED\u06EE-\u06EF\u06F0-\u06F9\u06FA-\u06FC\u06FD-\u06FE\u06FF\u0750-\u077F\uFB50-\uFBB1\uFBB2-\uFBC1\uFBD3-\uFD3D\uFD50-\uFD8F\uFD92-\uFDC7\uFDF0-\uFDFB\uFDFC\uFE70-\uFE74\uFE76-\uFEFC\U00010E60-\U00010E7E]")},
+                'regex' : re.compile(ur"[\u0600-\u0604\u0606-\u0608\u0609-\u060A\u060B\u060D\u060E-\u060F\u0610-\u061A\u061E\u0620-\u063F\u0641-\u064A\u0656-\u065E\u066A-\u066D\u066E-\u066F\u0671-\u06D3\u06D4\u06D5\u06D6-\u06DC\u06DE\u06DF-\u06E4\u06E5-\u06E6\u06E7-\u06E8\u06E9\u06EA-\u06ED\u06EE-\u06EF\u06F0-\u06F9\u06FA-\u06FC\u06FD-\u06FE\u06FF\u0750-\u077F\uFB50-\uFBB1\uFBB2-\uFBC1\uFBD3-\uFD3D\uFD50-\uFD8F\uFD92-\uFDC7\uFDF0-\uFDFB\uFDFC\uFE70-\uFE74\uFE76-\uFEFC\U00010E60-\U00010E7E\u08A0-\u08FF\U0001EE00-\U0001EEFF]")},
     'armenian' : {
                 'name'  : u"Armenian",
                 'official' : True,
-                'regex' : re.compile(ur"[\u0531-\u0556\u0559\u055A-\u055F\u0561-\u0587\u058A\uFB13-\uFB17]")},
+                'regex' : re.compile(ur"[\u0531-\u0556\u0559\u055A-\u055F\u0561-\u0587\u058A\u058F\uFB13-\uFB17]")},
     'aui' : {
                 'name'  : u"Aui",
                 'official' : False,
@@ -91,6 +101,10 @@ scripts = {
                 'name'  : u"Carian",
                 'official' : True,
                 'regex' : re.compile(ur"[\U000102A0-\U000102D0]")},
+    'chakma' : {
+                'name'  : u"Chakma",
+                'official' : True,
+                'regex' : re.compile(ur"[\U00011100-\U0001114F]")},
     'cham' : {
                 'name'  : u"Cham",
                 'official' : True,
@@ -106,7 +120,7 @@ scripts = {
     'coptic' : {
                 'name'  : u"Coptic",
                 'official' : True,
-                'regex' : re.compile(ur"[\u03E2-\u03EF\u2C80-\u2CE4\u2CE5-\u2CEA\u2CEB-\u2CEE\u2CEF-\u2CF1\u2CF9-\u2CFC\u2CFD\u2CFE-\u2CFF]")},
+                'regex' : re.compile(ur"[\u03E2-\u03EF\u2C80-\u2CE4\u2CE5-\u2CEA\u2CEB-\u2CEE\u2CEF-\u2CF3\u2CF9-\u2CFC\u2CFD\u2CFE-\u2CFF]")},
     'cuneiform' : {
                 'name'  : u"Cuneiform",
                 'official' : True,
@@ -154,11 +168,19 @@ scripts = {
     'georgian' : {
                 'name'  : u"Georgian",
                 'official' : True,
-                'regex' : re.compile(ur"[\u10A0-\u10C5\u10D0-\u10FA\u10FC\u2D00-\u2D25]")},
+                'regex' : re.compile(ur"[\u10A0-\u10C5\u10C7\u10CD\u10D0-\u10FA\u10FC\u2D00-\u2D25\u10C7\u2D27\u10CD\u2D2D\u10FD-\u10FF]")},
     'glagolitic' : {
                 'name'  : u"Glagolitic",
                 'official' : True,
                 'regex' : re.compile(ur"[\u2C00-\u2C2E\u2C30-\u2C5E]")},
+    'glaithaa' : {
+                'name'  : u"Glaitha-A",
+                'official' : False,
+                'regex' : re.compile(ur"[\uE900-\uE97F]")},
+    'glaithab' : {
+                'name'  : u"Glaitha-B",
+                'official' : False,
+                'regex' : re.compile(ur"[\uE980-\uE9DF]")},
     'gothic' : {
                 'name'  : u"Gothic",
                 'official' : True,
@@ -182,7 +204,7 @@ scripts = {
     'han' : {
                 'name'  : u"Han",
                 'official' : True,
-                'regex' : re.compile(ur"[\u2E80-\u2E99\u2E9B-\u2EF3\u2F00-\u2FD5\u3005\u3007\u3021-\u3029\u3038-\u303A\u303B\u3400-\u4DB5\u4E00-\u9FCB\uF900-\uFA2D\uFA30-\uFA6D\uFA70-\uFAD9\U00020000-\U0002A6D6\U0002A700-\U0002B734\U0002B740-\U0002B81D\U0002F800-\U0002FA1D]")},
+                'regex' : re.compile(ur"[\u2E80-\u2E99\u2E9B-\u2EF3\u2F00-\u2FD5\u3005\u3007\u3021-\u3029\u3038-\u303A\u303B\u3400-\u4DB5\u4E00-\u9FCC\uF900-\uFA2F\uFA30-\uFA6D\uFA70-\uFAD9\U00020000-\U0002A6D6\U0002A700-\U0002B734\U0002B740-\U0002B81D\U0002F800-\U0002FA1D]")},
     'hanunoo' : {
                 'name'  : u"Hanunoo",
                 'official' : True,
@@ -203,10 +225,10 @@ scripts = {
                 'name'  : u"Imperial Aramaic",
                 'official' : True,
                 'regex' : re.compile(ur"[\U00010840-\U00010855\U00010857\U00010858-\U0001085F]")},
-    'inherited' : {
-                'name'  : u"Inherited",
+    'noscript' : {
+                'name'  : u"noscript",
                 'official' : True,
-                'regex' : re.compile(ur"[\u0300-\u036F\u0485-\u0486\u064B-\u0655\u065F\u0670\u0951-\u0952\u1CD0-\u1CD2\u1CD4-\u1CE0\u1CE2-\u1CE8\u1CED\u1DC0-\u1DE6\u1DFC-\u1DFF\u200C-\u200D\u20D0-\u20DC\u20DD-\u20E0\u20E1\u20E2-\u20E4\u20E5-\u20F0\u302A-\u302D\u3099-\u309A\uFE00-\uFE0F\uFE20-\uFE26\U000101FD\U0001D167-\U0001D169\U0001D17B-\U0001D182\U0001D185-\U0001D18B\U0001D1AA-\U0001D1AD\U000E0100-\U000E01EF]")},
+                'regex' : re.compile(ur"[\u0300-\u036F\u0485-\u0486\u064B-\u0655\u065F\u0670\u0951-\u0952\u1CD0-\u1CD2\u1CD4-\u1CE0\u1CE2-\u1CE8\u1CED\u1DC0-\u1DE6\u1DFC-\u1DFF\u200C-\u200D\u20D0-\u20DC\u20DD-\u20E0\u20E1\u20E2-\u20E4\u20E5-\u20F0\u302A-\u302D\u3099-\u309A\uFE00-\uFE0F\uFE20-\uFE26\U000101FD\U0001D167-\U0001D169\U0001D17B-\U0001D182\U0001D185-\U0001D18B\U0001D1AA-\U0001D1AD\U000E0100-\U000E01EF\u1CF3-\u1CF6]")},
     'inscriptionalpahlavi' : {
                 'name'  : u"Inscriptional Pahlavi",
                 'official' : True,
@@ -266,15 +288,19 @@ scripts = {
     'lao' : {
                 'name'  : u"Lao",
                 'official' : True,
-                'regex' : re.compile(ur"[\u0E81-\u0E82\u0E84\u0E87-\u0E88\u0E8A\u0E8D\u0E94-\u0E97\u0E99-\u0E9F\u0EA1-\u0EA3\u0EA5\u0EA7\u0EAA-\u0EAB\u0EAD-\u0EB0\u0EB1\u0EB2-\u0EB3\u0EB4-\u0EB9\u0EBB-\u0EBC\u0EBD\u0EC0-\u0EC4\u0EC6\u0EC8-\u0ECD\u0ED0-\u0ED9\u0EDC-\u0EDD]")},
+                'regex' : re.compile(ur"[\u0E81-\u0E82\u0E84\u0E87-\u0E88\u0E8A\u0E8D\u0E94-\u0E97\u0E99-\u0E9F\u0EA1-\u0EA3\u0EA5\u0EA7\u0EAA-\u0EAB\u0EAD-\u0EB0\u0EB1\u0EB2-\u0EB3\u0EB4-\u0EB9\u0EBB-\u0EBC\u0EBD\u0EC0-\u0EC4\u0EC6\u0EC8-\u0ECD\u0ED0-\u0ED9\u0EDC-\u0EDF]")},
     'latin' : {
                 'name'  : u"Latin",
                 'official' : True,
-                'regex' : re.compile(ur"[\u0041-\u005A\u0061-\u007A\u00AA\u00BA\u00C0-\u00D6\u00D8-\u00F6\u00F8-\u01BA\u01BB\u01BC-\u01BF\u01C0-\u01C3\u01C4-\u0293-\u02AF\u02B0-\u02B8\u02E0-\u02E4\u1D00-\u1D25\u1D2C-\u1D5C\u1D62-\u1D65\u1D6B-\u1D77\u1D79-\u1D9A\u1D9B-\u1DBE\u1E00-\u1EFF\u2071\u207F\u2090-\u209C\u212A-\u212B\u2132\u214E\u2160-\u2182\u2183-\u2184\u2185-\u2188\u2C60-\u2C7C\u2C7D\u2C7E-\u2C7F\uA722-\uA76F\uA770\uA771-\uA787\uA78B-\uA78E\uA790-\uA791\uA7A0-\uA7A9\uA7FA\uA7FB-\uA7FF\uFB00-\uFB06\uFF21-\uFF3A\uFF41-\uFF5A]")},
+                'regex' : re.compile(ur"[\u0041-\u005A\u0061-\u007A\u00AA\u00BA\u00C0-\u00D6\u00D8-\u00F6\u00F8-\u01BA\u01BB\u01BC-\u01BF\u01C0-\u01C3\u01C4-\u0293-\u02AF\u02B0-\u02B8\u02E0-\u02E4\u1D00-\u1D25\u1D2C-\u1D5C\u1D62-\u1D65\u1D6B-\u1D77\u1D79-\u1D9A\u1D9B-\u1DBE\u1E00-\u1EFF\u2071\u207F\u2090-\u209C\u212A-\u212B\u2132\u214E\u2160-\u2182\u2183-\u2184\u2185-\u2188\u2C60-\u2C7C\u2C7D\u2C7E-\u2C7F\uA7AA\uA7F8\uA7F9\uA792\uA793\uA722-\uA76F\uA770\uA771-\uA787\uA78B-\uA78E\uA790-\uA791\uA7A0-\uA7A9\uA7FA\uA7FB-\uA7FF\uFB00-\uFB06\uFF21-\uFF3A\uFF41-\uFF5A]")},
     'lepcha' : {
                 'name'  : u"Lepcha",
                 'official' : True,
                 'regex' : re.compile(ur"[\u1C00-\u1C23\u1C24-\u1C2B\u1C2C-\u1C33\u1C34-\u1C35\u1C36-\u1C37\u1C3B-\u1C3F\u1C40-\u1C49\u1C4D-\u1C4F]")},
+    'lhenazi' : {
+                'name'  : u"Lhenazi",
+                'official' : False,
+                'regex' : re.compile(ur"[\uEA00-\uEA9F]")},
     'limbu' : {
                 'name'  : u"Limbu",
                 'official' : True,
@@ -306,7 +332,15 @@ scripts = {
     'meeteimayek' : {
                 'name'  : u"Meetei Mayek",
                 'official' : True,
-                'regex' : re.compile(ur"[\uABC0-\uABE2\uABE3-\uABE4\uABE5\uABE6-\uABE7\uABE8\uABE9-\uABEA\uABEB\uABEC\uABED\uABF0-\uABF9]")},
+                'regex' : re.compile(ur"[\uABC0-\uABE2\uABE3-\uABE4\uABE5\uABE6-\uABE7\uABE8\uABE9-\uABEA\uABEB\uABEC\uABED\uABF0-\uABF9\uAAE0-\uAAFF]")},
+    'meroitic' : {
+                'name'  : u"Meroitic",
+                'official' : True,
+                'regex' : re.compile(ur"[\U00010980-\U0001099F\U000109A0-\U000109FF]")},
+    'miao' : {
+                'name'  : u"Miao",
+                'official' : True,
+                'regex' : re.compile(ur"[\U00016F00-\U00016F9F]")},
     'mizarian' : {
                 'name'  : u"Mizarian",
                 'official' : False,
@@ -427,6 +461,10 @@ scripts = {
                 'name'  : u"Latin",
                 'official' : False,
                 'regex' : re.compile(ur"[ Latin\uE630-\uE64F]")},
+    'sharada' : {
+                'name'  : u"Sharada",
+                'official' : True,
+                'regex' : re.compile(ur"[\U00011180-\U000111DF]")},
     'shavian' : {
                 'name'  : u"Shavian",
                 'official' : True,
@@ -439,6 +477,10 @@ scripts = {
                 'name'  : u"Solresol",
                 'official' : False,
                 'regex' : re.compile(ur"[\uE770-\uE77F]")},
+    'sorasompeng' : {
+                'name'  : u"Sora Sompeng",
+                'official' : True,
+                'regex' : re.compile(ur"[\U000110D0-\U000110FF]")},
     'ssuraki' : {
                 'name'  : u"Ssûraki",
                 'official' : False,
@@ -450,7 +492,7 @@ scripts = {
     'sundanese' : {
                 'name'  : u"Sundanese",
                 'official' : True,
-                'regex' : re.compile(ur"[\u1B80-\u1B81\u1B82\u1B83-\u1BA0\u1BA1\u1BA2-\u1BA5\u1BA6-\u1BA7\u1BA8-\u1BA9\u1BAA\u1BAE-\u1BAF\u1BB0-\u1BB9]")},
+                'regex' : re.compile(ur"[\u1B80-\u1B81\u1B82\u1B83-\u1BA0\u1BA1\u1BA2-\u1BA5\u1BA6-\u1BA7\u1BA8-\u1BA9\u1BAD\u1BAE-\u1BAF\u1BB0-\u1BB9\u1BBA-\u1BBF\u1CC0-\u1CCF]")},
     'syai' : {
                 'name'  : u"Syai",
                 'official' : False,
@@ -483,6 +525,10 @@ scripts = {
                 'name'  : u"Tai Viet",
                 'official' : True,
                 'regex' : re.compile(ur"[\uAA80-\uAAAF\uAAB0\uAAB1\uAAB2-\uAAB4\uAAB5-\uAAB6\uAAB7-\uAAB8\uAAB9-\uAABD\uAABE-\uAABF\uAAC0\uAAC1\uAAC2\uAADB-\uAADC\uAADD\uAADE-\uAADF]")},
+    'takri' : {
+                'name'  : u"Takri",
+                'official' : True,
+                'regex' : re.compile(ur"[\U00011680-\U000116CF]")},
     'tamil' : {
                 'name'  : u"Tamil",
                 'official' : True,
@@ -518,7 +564,7 @@ scripts = {
     'tifinagh' : {
                 'name'  : u"Tifinagh",
                 'official' : True,
-                'regex' : re.compile(ur"[\u2D30-\u2D65\u2D6F\u2D70\u2D7F]")},
+                'regex' : re.compile(ur"[\u2D30-\u2D67\u2D6F\u2D70\u2D7F]")},
     'ugaritic' : {
                 'name'  : u"Ugaritic",
                 'official' : True,
