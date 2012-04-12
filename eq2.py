@@ -2,7 +2,7 @@ PLUGIN_NAME = '$eq2'
 PLUGIN_AUTHOR = 'Brian Schweitzer'
 PLUGIN_DESCRIPTION = 'Adds an $eq2 function'
 PLUGIN_VERSION = "0.2.2"
-PLUGIN_API_VERSIONS = ["0.12", "0.13", "0.14", "0.15"]
+PLUGIN_API_VERSIONS = ["0.12", "0.13", "0.14", "0.15", "0.16"]
 
 from picard.script import register_script_function
 
