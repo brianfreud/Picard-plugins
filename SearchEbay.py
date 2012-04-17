@@ -28,7 +28,7 @@ urls = {
                 'name' : u"Belgium (French)",
                 'url'  : u"http://www.befr.ebay.be/sch/i.html?_nkw="},
     'br' : {
-                'name' : u"Brazil (Mercado Libre)",
+                'name' : u"Brazil (Mercado Livre)",
                 'url'  : u"http://lista.mercadolivre.com.br/"},
     'ca1' : {
                 'name' : u"Canada (English)",
@@ -36,12 +36,27 @@ urls = {
     'ca2' : {
                 'name' : u"Canada (French)",
                 'url'  : u"http://www.cafr.ebay.ca/sch/i.html?_nkw="},
+    'cl' : {
+                'name' : u"Chile (Mercado Libre)",
+                'url'  : u"http://listado.mercadolibre.cl/"},
+    'co' : {
+                'name' : u"Columbia (Mercado Libre)",
+                'url'  : u"http://listado.mercadolibre.com.co/"},
+    'cr' : {
+                'name' : u"Costa Rica (Mercado Libre)",
+                'url'  : u"http://listado.mercadolibre.co.cr/"},
     'cz' : {
                 'name' : u"Czech Republic",
                 'url'  : u"http://search.eim.ebay.cz/?kw="},
     'dk' : {
                 'name' : u"Denmark",
                 'url'  : u"http://search.eim.ebay.dk/?kw="},
+    'do' : {
+                'name' : u"Dominican Republic (Mercado Libre)",
+                'url'  : u"http://listado.mercadolibre.com.do/"},
+    'ec' : {
+                'name' : u"Ecuador (Mercado Libre)",
+                'url'  : u"http://listado.mercadolibre.com.ec/"},
     'fi' : {
                 'name' : u"Finland",
                 'url'  : u"http://search.eim.ebay.fi/?kw="},
@@ -73,7 +88,7 @@ urls = {
                 'name' : u"Malaysia",
                 'url'  : u"http://www.ebay.com.my/sch/i.html?_nkw="},
     'mx' : {
-                'name' : u"Mexico (Mercado Libre)",
+                'name' : u"México (Mercado Livre)",
                 'url'  : u"http://listado.mercadolibre.com.mx/"},
     'nl' : {
                 'name' : u"Netherlands",
@@ -81,15 +96,24 @@ urls = {
     'no' : {
                 'name' : u"Norway",
                 'url'  : u"http://search.eim.ebay.no/?kw="},
+    'pa' : {
+                'name' : u"Panamá (Mercado Libre)",
+                'url'  : u"http://listado.mercadolibre.com.pa/"},
+    'pe' : {
+                'name' : u"Perú (Mercado Libre)",
+                'url'  : u"http://listado.mercadolibre.com.pe/"},
     'ph' : {
                 'name' : u"Philippines",
                 'url'  : u"http://www.ebay.ph/sch/i.html?_nkw="},
     'pl' : {
                 'name' : u"Poland",
                 'url'  : u"http://www.ebay.pl/sch/i.html?_nkw="},
-    'pt' : {
+    'pt1' : {
                 'name' : u"Portugal",
                 'url'  : u"http://search.eim.ebay.pt/?kw="},
+    'pt2' : {
+                'name' : u"Portugal (Mercado Livre)",
+                'url'  : u"http://lista.mercadolivre.pt/"},
     'ru' : {
                 'name' : u"Russia",
                 'url'  : u"http://search.classifieds.ebay.ru/eim/search.ru_RU.html?kw="},
@@ -123,19 +147,25 @@ urls = {
     'us' : {
                 'name' : u"United States",
                 'url'  : u"http://www.ebay.com/sch/i.html?_nkw="},
+    'uy' : {
+                'name' : u"Uruguay (Mercado Libre)",
+                'url'  : u"http://listado.mercadolibre.com.uy/"},
+    've' : {
+                'name' : u"Venezuela (Mercado Libre)",
+                'url'  : u"http://listado.mercadolibre.com.ve/"},
     'vn' : {
                 'name' : u"Vietnam",
                 'url'  : u"http://chodientu.vn/ebay-browse-keyword-"}
 }
 
 
-for tld in ['ar','au','at','be1','be2','br','ca1','ca2','cz','dk','fi','fr','de','gr','hk','hu','in','ie','it','my','mx','nl','no','ph','pl','pt','ru','sg','kr','es','se','ch','tw','th','tr','uk','us','vn']:
+for tld in ['ar','au','at','be1','be2','br','ca1','ca2','cl','co','cr','cz','dk','do','ec','fi','fr','de','gr','hk','hu','in','ie','it','my','mx','nl','no','pa','pe','ph','pl','pt1','pt2','ru','sg','kr','es','se','ch','tw','th','tr','uk','us','uy','ve','vn']:
     class SearcheBay(BaseAction):
         NAME = "Search eBay " + urls[tld]['name']
-        def callback(self, objs):
-            search_url = urls['tld']['url']
+        def callback(self, objs, tld=tld):
             cluster = objs[0]
-            url = search_url + QtCore.QUrl.toPercentEncoding(cluster.metadata["album"])
+            url = urls[tld]['url']
+            url += QtCore.QUrl.toPercentEncoding(cluster.metadata["album"])
             if tld == 'es':
                 url += '.htm'
             if tld == 'vn':
