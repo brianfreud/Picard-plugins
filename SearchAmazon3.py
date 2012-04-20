@@ -1,3 +1,22 @@
+#       http://www.amazon.ca/*
+#       http://www.amazon.cn/*
+#       http://www.amazon.co.jp/*
+#       http://www.amazon.com/*
+#       http://www.amazon.co.uk/*
+#       http://www.amazon.de/*
+#       http://www.amazon.es/*
+#       http://www.amazon.fr/*
+#       http://www.amazon.it/*
+#       https://www.amazon.ca/*
+#       https://www.amazon.cn/*
+#       https://www.amazon.co.jp/*
+#       https://www.amazon.com/*
+#       https://www.amazon.co.uk/*
+#       https://www.amazon.de/*
+#       https://www.amazon.es/*
+#       https://www.amazon.fr/*
+#       https://www.amazon.it/*
+
 # -*- coding: utf-8 -*-
 
 PLUGIN_NAME = u"Search Amazon for Release"
