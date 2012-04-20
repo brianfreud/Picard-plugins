@@ -48,9 +48,12 @@ urls = {
     'cz' : {
                 'name' : u"Czech Republic",
                 'url'  : u"http://search.eim.ebay.cz/?kw="},
-    'dk' : {
+    'dk1' : {
                 'name' : u"Denmark",
                 'url'  : u"http://search.eim.ebay.dk/?kw="},
+    'dk2' : {
+                'name' : u"dba.dk (Denmark)",
+                'url'  : u"http://www.dba.dk/soeg/?soeg="},
     'do' : {
                 'name' : u"Dominican Republic",
                 'url'  : u"http://listado.mercadolibre.com.do/"},
@@ -84,6 +87,9 @@ urls = {
     'ie' : {
                 'name' : u"Ireland",
                 'url'  : u"http://www.ebay.ie/sch/i.html?_nkw="},
+    'jp' : {
+                'name' : u"Sekaimon (Japan)",
+                'url'  : u"http://www.sekaimon.com/ItemListReg.do?srch_keyword="},
     'it1' : {
                 'name' : u"Italy (eBay classic)",
                 'url'  : u"http://www.ebay.it/sch/i.html?_nkw="},
@@ -96,9 +102,12 @@ urls = {
     'mx' : {
                 'name' : u"México",
                 'url'  : u"http://listado.mercadolibre.com.mx/"},
-    'nl' : {
+    'nl1' : {
                 'name' : u"Netherlands",
                 'url'  : u"http://www.ebay.nl/sch/i.html?_nkw="},
+    'nl2' : {
+                'name' : u"Marktplaats.nl (Netherlands)",
+                'url'  : u"http://kopen.marktplaats.nl/search.php?q="},
     'no' : {
                 'name' : u"Norway",
                 'url'  : u"http://search.eim.ebay.no/?kw="},
@@ -144,9 +153,12 @@ urls = {
     'tw' : {
                 'name' : u"Ruten (Taiwan)",
                 'url'  : u"http://search.ruten.com.tw/search/s000.php?k="},
-    'th' : {
+    'th1' : {
                 'name' : u"Thailand",
                 'url'  : u"http://export.ebay.co.th/search/index.php?q="},
+    'th2' : {
+                'name' : u"Sanook (Thailand)",
+                'url'  : u"http://shopping.sanook.com/search_list.php?q="},
     'tr' : {
                 'name' : u"Gitti Gidiyor (Turkey)",
                 'url'  : u"http://arama.gittigidiyor.com/?aramakelime="},
@@ -191,7 +203,7 @@ for tld in ['ar','br','cl','co','cr','do','ec','mx','pa','pe','pt2','uy','ve']:
     register_cluster_action(SearchML())
     register_album_action(SearchML())
 
-for tld in ['au','at','be1','be2','ca1','ca2','cz','dk','fi','fr','de1','de2','gr','hk','hu','in','ie','it1','it2','my','nl','no','ph','pl','pt1','ru','sg','es1','es2','ch','th','uk','us']:
+for tld in ['au','at','be1','be2','ca1','ca2','cz','dk1','fi','fr','de1','de2','gr','hk','hu','in','ie','it1','it2','my','nl1','no','ph','pl','pt1','ru','sg','es1','es2','ch','th1','uk','us']:
     class SearcheBay(BaseAction):
         NAME = urls[tld]['name']
         MENU = "eBay"
@@ -201,7 +213,7 @@ for tld in ['au','at','be1','be2','ca1','ca2','cz','dk','fi','fr','de1','de2','g
     register_cluster_action(SearcheBay())
     register_album_action(SearcheBay())
 
-for tld in ['kr','vn','tr','tw','se']:
+for tld in ['kr','dk2','vn','tr','nl2','tw','jp','se','th2']:
     class SearcheBayAffiliate(BaseAction):
         NAME = urls[tld]['name']
         MENU = "eBay-affiliated"
