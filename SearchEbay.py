@@ -234,7 +234,7 @@ for tld in ['kr','vn','dk2','tr','nl2','tw','th2','jp','se']:
     register_cluster_action(SearcheBayAffiliate())
     register_album_action(SearcheBayAffiliate())
 
-register_add_plugin_submenu("Search")
-register_add_plugin_submenu("eBay", "Search")
-register_add_plugin_submenu("Mercado Libre", "Search")
-register_add_plugin_submenu("eBay-affiliated", "Search")
+register_add_plugin_submenu("Search", (Cluster, Album, File, NonAlbumTrack, Track))
+register_add_plugin_submenu('Mercado Libre', (Cluster,Album), 'Search')
+register_add_plugin_submenu('eBay-affiliated', (Cluster,Album), 'Search')
+register_add_plugin_submenu('eBay', (Cluster,Album), 'Search')

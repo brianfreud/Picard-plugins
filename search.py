@@ -8,14 +8,17 @@ PLUGIN_API_VERSIONS = ['0.16']
 
 from PyQt4 import QtCore, QtGui
 from picard.cluster import Cluster
+from picard.album import Album
+from picard.file import File
+from picard.track import Track, NonAlbumTrack
 from picard.util import webbrowser2
 from picard.ui.itemviews import BaseAction, register_album_action, register_file_action, register_cluster_action, register_add_plugin_submenu
 
-register_add_plugin_submenu('Search')
-register_add_plugin_submenu('Mercado Libre', 'Search')
-register_add_plugin_submenu('eBay-affiliated', 'Search')
-register_add_plugin_submenu('eBay', 'Search')
-register_add_plugin_submenu('Amazon', 'Search')
+register_add_plugin_submenu("Search", (Cluster, Album, File, NonAlbumTrack, Track))
+register_add_plugin_submenu('Mercado Libre', (Cluster,Album), 'Search')
+register_add_plugin_submenu('eBay-affiliated', (Cluster,Album), 'Search')
+register_add_plugin_submenu('eBay', (Cluster,Album), 'Search')
+register_add_plugin_submenu('Amazon', (Cluster,Album), 'Search')
 
 urls = {
     'generic' : [

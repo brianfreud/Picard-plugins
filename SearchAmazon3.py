@@ -72,5 +72,5 @@ class search_all_amazon(BaseAction):
 register_cluster_action(search_all_amazon())
 register_album_action(search_all_amazon())
 
-register_add_plugin_submenu("Search")
-register_add_plugin_submenu("Amazon", "Search")
+register_add_plugin_submenu("Search", (Cluster, Album, File, NonAlbumTrack, Track))
+register_add_plugin_submenu('Amazon', (Cluster,Album), 'Search')
