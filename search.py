@@ -7,18 +7,20 @@ PLUGIN_VERSION = '1.0'
 PLUGIN_API_VERSIONS = ['0.16']
 
 from PyQt4 import QtCore, QtGui
-from picard.cluster import Cluster
-from picard.album import Album
+from picard.album import Album, NatAlbum
+from picard.cluster import Cluster, ClusterList, UnmatchedFiles
 from picard.file import File
 from picard.track import Track, NonAlbumTrack
 from picard.util import webbrowser2
 from picard.ui.itemviews import BaseAction, register_album_action, register_file_action, register_cluster_action, register_add_plugin_submenu
+from picard.plugin import ExtensionPoint
 
-register_add_plugin_submenu("Search", (Cluster, Album, File, NonAlbumTrack, Track))
-register_add_plugin_submenu('Mercado Libre', (Cluster,Album), 'Search')
-register_add_plugin_submenu('eBay-affiliated', (Cluster,Album), 'Search')
-register_add_plugin_submenu('eBay', (Cluster,Album), 'Search')
-register_add_plugin_submenu('Amazon', (Cluster,Album), 'Search')
+register_add_plugin_submenu("Search", (Cluster,Album,File,NonAlbumTrack,Track))
+register_add_plugin_submenu('Mercado Libre', (Cluster,Album), "Search")
+register_add_plugin_submenu('eBay-affiliated', (Cluster,Album), "Search")
+register_add_plugin_submenu('eBay', (Cluster,Album), "Search")
+register_add_plugin_submenu('Amazon', (Cluster,Album), "Search")
+register_add_plugin_submenu('Universal Publishing Production Music', (Cluster,Album,File,Track,NonAlbumTrack), "Search")
 
 urls = {
     'generic' : [
@@ -39,6 +41,59 @@ urls = {
         ('The Lortel Archives (IoBDb)', set(['album','cluster']), 'album', 'http://www.lortel.org/LLA_archive/index.cfm?COMMITT=YES&search_by=SHOW+TITLE&Go.x=0&Go.y=0&keyword='),
         ('VGMdb', set(['album','cluster']), 'album', 'http://vgmdb.net/search?q='),
     ],
+    'unippm': {
+        'au' : {
+            'name' : u'Australia',
+            'url'  : u'http://www.unippm.com.au'},
+        'hk' : {
+            'name' : u'Asia',
+            'url'  : u'http://www.unippm.hk'},
+        'cn' : {
+            'name' : u'China',
+            'url'  : u'http://www.unippm.cn'},
+        'de' : {
+            'name' : u'Germany',
+            'url'  : u'http://www.unippm.de'},
+        'fr' : {
+            'name' : u'France',
+            'url'  : u'http://www.unippm.fr'},
+        'global' : {
+            'name' : u'Global',
+            'url'  : u'http://www.unippmglobal.com'},
+        'il' : {
+            'name' : u'Israel',
+            'url'  : u'http://www.unippm.co.il'},
+        'it' : {
+            'name' : u'Italy',
+            'url'  : u'http://www.unippm.it'},
+        'latin' : {
+            'name' : u'Latin America',
+            'url'  : u'http://www.umpla.com'},
+        'pl' : {
+            'name' : u'Poland',
+            'url'  : u'http://www.unippm.pl'},
+        'se' : {
+            'name' : u'Scandinavia',
+            'url'  : u'http://www.unippm.se'},
+        'za' : {
+            'name' : u'South Africa',
+            'url'  : u'http://www.unippm.co.za'},
+        'es' : {
+            'name' : u'Spain',
+            'url'  : u'http://www.unippm.es'},
+        'nl' : {
+            'name' : u'The Netherlands',
+            'url'  : u'http://www.unippm.nl'},
+        'uk' : {
+            'name' : u'United Kingdom',
+            'url'  : u'http://www.unippm.co.uk'},
+        'us1' : {
+            'name' : u'United States (Killer Tracks)',
+            'url'  : u'http://www.killertracks.com'},
+        'us2' : {
+            'name' : u'United States (firstcom Music)',
+            'url'  : u'http://www.firstcom.com/'},
+    },
     'amazon': {
         'ca' : {
             'name' : u'Canada',
@@ -320,6 +375,7 @@ for tld in ['ar','br','cl','co','cr','do','ec','mx','pa','pe','pt2','uy','ve']:
     register_cluster_action(SearchML())
     register_album_action(SearchML())
 
+
 for tld in ['au','at','be1','be2','ca1','ca2','cz','dk1','fi','fr','de1','de2','gr','hk','hu','in','ie','it1','it2','my','nl1','no','ph','pl','pt1','ru','sg','es1','es2','ch','th1','uk','us1']:
     class SearcheBay(BaseAction):
         NAME = urls['ebay'][tld]['name']
@@ -330,6 +386,7 @@ for tld in ['au','at','be1','be2','ca1','ca2','cz','dk1','fi','fr','de1','de2','
     register_cluster_action(SearcheBay())
     register_album_action(SearcheBay())
 
+
 for tld in ['kr','vn','dk2','tr','us2','nl2','tw','th2','jp','se']:
     class SearcheBayAffiliate(BaseAction):
         NAME = urls['ebay'][tld]['name']
@@ -339,6 +396,7 @@ for tld in ['kr','vn','dk2','tr','us2','nl2','tw','th2','jp','se']:
             ebay_open_page(self, objs, tld)
     register_cluster_action(SearcheBayAffiliate())
     register_album_action(SearcheBayAffiliate())
+
 
 for tld in ['ca','cn','fr','de','it','jp','es','uk','com']:
     class search_amazon(BaseAction):
@@ -351,6 +409,7 @@ for tld in ['ca','cn','fr','de','it','jp','es','uk','com']:
     register_cluster_action(search_amazon())
     register_album_action(search_amazon())
 
+
 class search_all_amazon(BaseAction):
     NAME = 'all Amazon sites'
     MENU = 'Amazon'
@@ -362,9 +421,32 @@ class search_all_amazon(BaseAction):
 register_cluster_action(search_all_amazon())
 register_album_action(search_all_amazon())
 
+
+for tld in ['au','hk','cn','de','fr','global','il','it','latin','pl','se','za','es','nl','uk','us2','us1']:
+    class Search_unippm_album(BaseAction):
+        NAME = urls['unippm'][tld]['name']
+        MENU = 'Universal Publishing Production Music'
+
+        def callback(self, objs, tld=tld):
+            album_open_page(self, objs, urls['unippm'][tld]['url'] + '/#/en/search-results.aspx?searchtype=quick&isNewSearch=true&mode=CD&keyword=')
+
+    register_cluster_action(Search_unippm_album())
+    register_album_action(Search_unippm_album())
+
+
+for tld in ['au','hk','cn','de','fr','global','il','it','latin','pl','se','za','es','nl','uk','us2','us1']:
+    class Search_unippm_file(BaseAction):
+        NAME = urls['unippm'][tld]['name']
+        MENU = 'Universal Publishing Production Music'
+
+        def callback(self, objs, tld=tld):
+            file_open_page(self, objs, urls['unippm'][tld]['url'] + '/#/en/search-results.aspx?searchtype=quick&isNewSearch=true&keyword=')
+
+    register_file_action(Search_unippm_file())
+
 for site in urls['generic']:
     class search_generic(BaseAction):
-        MENU = 'Search'
+        MENU = "Search"
         NAME = site[0]
         def callback(self, objs, site = site):
             cbFunction = globals()[site[2] + '_open_page']
