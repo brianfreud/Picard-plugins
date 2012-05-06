@@ -41,59 +41,6 @@ urls = {
         ('The Lortel Archives (IoBDb)', set(['album','cluster']), 'album', 'http://www.lortel.org/LLA_archive/index.cfm?COMMITT=YES&search_by=SHOW+TITLE&Go.x=0&Go.y=0&keyword='),
         ('VGMdb', set(['album','cluster']), 'album', 'http://vgmdb.net/search?q='),
     ],
-    'unippm': {
-        'au' : {
-            'name' : u'Australia',
-            'url'  : u'http://www.unippm.com.au'},
-        'hk' : {
-            'name' : u'Asia',
-            'url'  : u'http://www.unippm.hk'},
-        'cn' : {
-            'name' : u'China',
-            'url'  : u'http://www.unippm.cn'},
-        'de' : {
-            'name' : u'Germany',
-            'url'  : u'http://www.unippm.de'},
-        'fr' : {
-            'name' : u'France',
-            'url'  : u'http://www.unippm.fr'},
-        'global' : {
-            'name' : u'Global',
-            'url'  : u'http://www.unippmglobal.com'},
-        'il' : {
-            'name' : u'Israel',
-            'url'  : u'http://www.unippm.co.il'},
-        'it' : {
-            'name' : u'Italy',
-            'url'  : u'http://www.unippm.it'},
-        'latin' : {
-            'name' : u'Latin America',
-            'url'  : u'http://www.umpla.com'},
-        'pl' : {
-            'name' : u'Poland',
-            'url'  : u'http://www.unippm.pl'},
-        'se' : {
-            'name' : u'Scandinavia',
-            'url'  : u'http://www.unippm.se'},
-        'za' : {
-            'name' : u'South Africa',
-            'url'  : u'http://www.unippm.co.za'},
-        'es' : {
-            'name' : u'Spain',
-            'url'  : u'http://www.unippm.es'},
-        'nl' : {
-            'name' : u'The Netherlands',
-            'url'  : u'http://www.unippm.nl'},
-        'uk' : {
-            'name' : u'United Kingdom',
-            'url'  : u'http://www.unippm.co.uk'},
-        'us1' : {
-            'name' : u'United States (Killer Tracks)',
-            'url'  : u'http://www.killertracks.com'},
-        'us2' : {
-            'name' : u'United States (firstcom Music)',
-            'url'  : u'http://www.firstcom.com/'},
-    },
     'amazon': {
         'ca' : {
             'name' : u'Canada',
@@ -292,6 +239,59 @@ urls = {
         'vn' : {
             'name' : u'Chodientu (Vietnam)',
             'url'  : u'http://chodientu.vn/ebay-browse-keyword-'}
+    },
+    'unippm': {
+        'au' : {
+            'name' : u'Australia',
+            'url'  : u'http://www.unippm.com.au'},
+        'hk' : {
+            'name' : u'Asia',
+            'url'  : u'http://www.unippm.hk'},
+        'cn' : {
+            'name' : u'China',
+            'url'  : u'http://www.unippm.cn'},
+        'de' : {
+            'name' : u'Germany',
+            'url'  : u'http://www.unippm.de'},
+        'fr' : {
+            'name' : u'France',
+            'url'  : u'http://www.unippm.fr'},
+        'global' : {
+            'name' : u'Global',
+            'url'  : u'http://www.unippmglobal.com'},
+        'il' : {
+            'name' : u'Israel',
+            'url'  : u'http://www.unippm.co.il'},
+        'it' : {
+            'name' : u'Italy',
+            'url'  : u'http://www.unippm.it'},
+        'latin' : {
+            'name' : u'Latin America',
+            'url'  : u'http://www.umpla.com'},
+        'pl' : {
+            'name' : u'Poland',
+            'url'  : u'http://www.unippm.pl'},
+        'se' : {
+            'name' : u'Scandinavia',
+            'url'  : u'http://www.unippm.se'},
+        'za' : {
+            'name' : u'South Africa',
+            'url'  : u'http://www.unippm.co.za'},
+        'es' : {
+            'name' : u'Spain',
+            'url'  : u'http://www.unippm.es'},
+        'nl' : {
+            'name' : u'The Netherlands',
+            'url'  : u'http://www.unippm.nl'},
+        'uk' : {
+            'name' : u'United Kingdom',
+            'url'  : u'http://www.unippm.co.uk'},
+        'us1' : {
+            'name' : u'United States (Killer Tracks)',
+            'url'  : u'http://www.killertracks.com'},
+        'us2' : {
+            'name' : u'United States (firstcom Music)',
+            'url'  : u'http://www.firstcom.com/'},
     }
 }
 
@@ -399,18 +399,18 @@ for tld in ['kr','vn','dk2','tr','us2','nl2','tw','th2','jp','se']:
 
 
 for tld in ['ca','cn','fr','de','it','jp','es','uk','com']:
-    class search_amazon(BaseAction):
+    class Search_amazon(BaseAction):
         NAME = urls['amazon'][tld]['name']
         MENU = 'Amazon'
 
         def callback(self, objs, tld=tld):
             album_and_artist_open_page(self, objs, tld, True)
 
-    register_cluster_action(search_amazon())
-    register_album_action(search_amazon())
+    register_cluster_action(Search_amazon())
+    register_album_action(Search_amazon())
 
 
-class search_all_amazon(BaseAction):
+class Search_all_amazon(BaseAction):
     NAME = 'all Amazon sites'
     MENU = 'Amazon'
 
@@ -418,8 +418,8 @@ class search_all_amazon(BaseAction):
         for tld in ['ca','cn','fr','de','it','jp','es','uk','com']:
             album_and_artist_open_page(self, objs, tld, True)
 
-register_cluster_action(search_all_amazon())
-register_album_action(search_all_amazon())
+register_cluster_action(Search_all_amazon())
+register_album_action(Search_all_amazon())
 
 
 for tld in ['au','hk','cn','de','fr','global','il','it','latin','pl','se','za','es','nl','uk','us2','us1']:
@@ -445,7 +445,7 @@ for tld in ['au','hk','cn','de','fr','global','il','it','latin','pl','se','za','
     register_file_action(Search_unippm_file())
 
 for site in urls['generic']:
-    class search_generic(BaseAction):
+    class Search_generic(BaseAction):
         MENU = "Search"
         NAME = site[0]
         def callback(self, objs, site = site):
@@ -453,8 +453,8 @@ for site in urls['generic']:
             cbFunction(self, objs, site[3])
 
     if 'album' in site[1]:
-        register_album_action(search_generic())
+        register_album_action(Search_generic())
     if 'cluster' in site[1]:
-        register_cluster_action(search_generic())
+        register_cluster_action(Search_generic())
     if 'file' in site[1]:
-        register_file_action(search_generic())
+        register_file_action(Search_generic())
