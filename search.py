@@ -3,7 +3,7 @@
 PLUGIN_NAME = u'Search online'
 PLUGIN_AUTHOR = u'Brian Schweitzer'
 PLUGIN_DESCRIPTION = 'Using existing metadata, launch a search at various websites.'
-PLUGIN_VERSION = '1.0'
+PLUGIN_VERSION = '1.1'
 PLUGIN_API_VERSIONS = ['0.16']
 
 from PyQt4 import QtCore, QtGui
@@ -309,60 +309,78 @@ urls = {
 # alamaula.com.mx
 # alamaula.pe
 
+def get_terms(self, objs, atom):
+    print objs
+    terms_list = []
+    for obj in objs:
+        print obj.metadata
+        terms_list.append(QtCore.QUrl.toPercentEncoding(obj.metadata[atom]))
+    print terms_list
+    return terms_list
+
+def open_pages(self, url, obj_list, atom):
+    for term in list(set(get_terms(self, obj_list, atom))):
+        webbrowser2.open(url + term)
 
 def album_open_page(self, objs, url):
-    cluster = objs[0]
-    url += QtCore.QUrl.toPercentEncoding(cluster.metadata['album'])
-    webbrowser2.open(url)
+    clusters = [o for o in objs if isinstance(o, Cluster)]
+    open_pages(self, url, clusters, 'album')
 
 def artist_open_page(self, objs, url):
-    cluster = objs[0]
-    url += QtCore.QUrl.toPercentEncoding(cluster.metadata['artist'])
-    webbrowser2.open(url)
+    files = [o for o in objs if isinstance(o, File)]
+    if (len(files) > 0):
+        open_pages(self, url, files, 'artist')
+    clusters = [o for o in objs if isinstance(o, Cluster)]
+    if (len(clusters) > 0):
+        open_pages(self, url, clusters, 'albumartist')
 
 def file_open_page(self, objs, url):
-    cluster = objs[0]
-    url += QtCore.QUrl.toPercentEncoding(cluster.metadata['title'])
-    webbrowser2.open(url)
+    files = [o for o in objs if isinstance(o, File)]
+    open_pages(self, url, files, 'title')
 
 def album_and_artist_open_page(self, objs, tld, amazon = None):
-    cluster = objs[0]
-    url = []
-    url.append(cluster.metadata['artist'])
-    url.append(' ')
-    url.append(cluster.metadata['album'])
-    url = QtCore.QUrl.toPercentEncoding(''.join(url))
-    if amazon:
-        url = urls['amazon'][tld]['url'] + url
-    else:
-        url = tld + url
-    webbrowser2.open(url)
+    clusters = [o for o in objs if (isinstance(o, Cluster) or isinstance(o, File))]
+    for cluster in clusters:
+        url = []
+        url.append(cluster.metadata['artist'])
+        url.append(' ')
+        url.append(cluster.metadata['album'])
+        url = QtCore.QUrl.toPercentEncoding(''.join(url))
+        if amazon:
+            url = urls['amazon'][tld]['url'] + url
+        else:
+            url = tld + url
+        webbrowser2.open(url)
 
 def file_and_album_and_artist_open_page(self, objs, tld):
-    cluster = objs[0]
-    url = []
-    url.append(cluster.metadata['artist'])
-    url.append(' ')
-    url.append(cluster.metadata['album'])
-    url.append(' ')
-    url.append(cluster.metadata['title'])
-    url = QtCore.QUrl.toPercentEncoding(''.join(url))
-    url = tld + url
-    webbrowser2.open(url)
+    clusters = [o for o in objs if (isinstance(o, Cluster) or isinstance(o, File))]
+    for cluster in clusters:
+        url = []
+        url.append(cluster.metadata['artist'])
+        url.append(' ')
+        url.append(cluster.metadata['album'])
+        url.append(' ')
+        url.append(cluster.metadata['title'])
+        url = QtCore.QUrl.toPercentEncoding(''.join(url))
+        url = tld + url
+        webbrowser2.open(url)
 
 def ebay_open_page(self, objs, tld):
-    cluster = objs[0]
-    url = urls['ebay'][tld]['url']
-    url += QtCore.QUrl.toPercentEncoding(cluster.metadata['album'])
-    if tld == 'de2':
-        url += '/k0'
-    if tld == 'es':
-        url += '.htm'
-    if tld == 'us2':
-        url += '._W0QQmZmusicQQsubmitZSearchQQtgZproductsQQ_trksidZp3030'
-    if tld == 'vn':
-        url += '.html'
-    webbrowser2.open(url)
+    clusters = [o for o in objs if isinstance(o, Cluster)]
+    album_list = []
+    for cluster in clusters:
+        album_list.append(QtCore.QUrl.toPercentEncoding(cluster.metadata['album']))
+    for album in list(set(album_list)):
+        url = urls['ebay'][tld]['url'] + album
+        if tld == 'de2':
+            url += '/k0'
+        if tld == 'es':
+            url += '.htm'
+        if tld == 'us2':
+            url += '._W0QQmZmusicQQsubmitZSearchQQtgZproductsQQ_trksidZp3030'
+        if tld == 'vn':
+            url += '.html'
+        webbrowser2.open(url)
 
 
 for tld in ['ar','br','cl','co','cr','do','ec','mx','pa','pe','pt2','uy','ve']:
