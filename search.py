@@ -296,7 +296,6 @@ urls = {
 }
 
 # ebay:
-# half.com
 # eachnet.com
 # alamaula.com
 # alamaula.com.br
