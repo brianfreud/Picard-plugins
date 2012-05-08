@@ -309,12 +309,9 @@ urls = {
 # alamaula.pe
 
 def get_terms(self, objs, atom):
-    print objs
     terms_list = []
     for obj in objs:
-        print obj.metadata
         terms_list.append(QtCore.QUrl.toPercentEncoding(obj.metadata[atom]))
-    print terms_list
     return terms_list
 
 def open_pages(self, url, obj_list, atom):
