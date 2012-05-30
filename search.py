@@ -3,24 +3,13 @@
 PLUGIN_NAME = u'Search online'
 PLUGIN_AUTHOR = u'Brian Schweitzer'
 PLUGIN_DESCRIPTION = 'Using existing metadata, launch a search at various websites.'
-PLUGIN_VERSION = '1.1'
-PLUGIN_API_VERSIONS = ['0.16']
+PLUGIN_VERSION = '1.2'
+PLUGIN_API_VERSIONS = ['0.16', '1.0']
 
 from PyQt4 import QtCore, QtGui
-from picard.album import Album, NatAlbum
-from picard.cluster import Cluster, ClusterList, UnmatchedFiles
-from picard.file import File
-from picard.track import Track, NonAlbumTrack
 from picard.util import webbrowser2
-from picard.ui.itemviews import BaseAction, register_album_action, register_file_action, register_cluster_action, register_add_plugin_submenu
+from picard.ui.itemviews import BaseAction, register_album_action, register_file_action, register_cluster_action
 from picard.plugin import ExtensionPoint
-
-register_add_plugin_submenu("Search", (Cluster,Album,File,NonAlbumTrack,Track))
-register_add_plugin_submenu('Mercado Libre', (Cluster,Album), "Search")
-register_add_plugin_submenu('eBay-affiliated', (Cluster,Album), "Search")
-register_add_plugin_submenu('eBay', (Cluster,Album), "Search")
-register_add_plugin_submenu('Amazon', (Cluster,Album), "Search")
-register_add_plugin_submenu('Universal Publishing Production Music', (Cluster,Album,File,Track,NonAlbumTrack), "Search")
 
 urls = {
     'generic' : [
@@ -382,7 +371,7 @@ def ebay_open_page(self, objs, tld):
 for tld in ['ar','br','cl','co','cr','do','ec','mx','pa','pe','pt2','uy','ve']:
     class SearchML(BaseAction):
         NAME = urls['ebay'][tld]['name']
-        MENU = 'Mercado Libre'
+        MENU = ['Search', 'eBay', 'Mercado Libre']
 
         def callback(self, objs, tld=tld):
             ebay_open_page(self, objs, tld)
@@ -393,7 +382,7 @@ for tld in ['ar','br','cl','co','cr','do','ec','mx','pa','pe','pt2','uy','ve']:
 for tld in ['au','at','be1','be2','ca1','ca2','cz','dk1','fi','fr','de1','de2','gr','hk','hu','in','ie','it1','it2','my','nl1','no','ph','pl','pt1','ru','sg','es1','es2','ch','th1','uk','us1']:
     class SearcheBay(BaseAction):
         NAME = urls['ebay'][tld]['name']
-        MENU = 'eBay'
+        MENU = ['Search', 'eBay']
 
         def callback(self, objs, tld=tld):
             ebay_open_page(self, objs, tld)
@@ -404,7 +393,7 @@ for tld in ['au','at','be1','be2','ca1','ca2','cz','dk1','fi','fr','de1','de2','
 for tld in ['kr','vn','dk2','tr','us2','nl2','tw','th2','jp','se']:
     class SearcheBayAffiliate(BaseAction):
         NAME = urls['ebay'][tld]['name']
-        MENU = 'eBay-affiliated'
+        MENU = ['Search', 'eBay-affiliated']
 
         def callback(self, objs, tld=tld):
             ebay_open_page(self, objs, tld)
@@ -415,7 +404,7 @@ for tld in ['kr','vn','dk2','tr','us2','nl2','tw','th2','jp','se']:
 for tld in ['ca','cn','fr','de','it','jp','es','uk','com']:
     class Search_amazon(BaseAction):
         NAME = urls['amazon'][tld]['name']
-        MENU = 'Amazon'
+        MENU = ['Search', 'Amazon']
 
         def callback(self, objs, tld=tld):
             album_and_artist_open_page(self, objs, tld, True)
@@ -426,7 +415,7 @@ for tld in ['ca','cn','fr','de','it','jp','es','uk','com']:
 
 class Search_all_amazon(BaseAction):
     NAME = 'all Amazon sites'
-    MENU = 'Amazon'
+    MENU = ['Search', 'Amazon']
 
     def callback(self, objs, tld=tld):
         for tld in ['ca','cn','fr','de','it','jp','es','uk','com']:
@@ -439,7 +428,7 @@ register_album_action(Search_all_amazon())
 for tld in ['au','hk','cn','de','fr','global','il','it','latin','pl','se','za','es','nl','uk','us2','us1']:
     class Search_unippm_album(BaseAction):
         NAME = urls['unippm'][tld]['name']
-        MENU = 'Universal Publishing Production Music'
+        MENU = ['Search', 'Universal Publishing Production Music']
 
         def callback(self, objs, tld=tld):
             album_open_page(self, objs, urls['unippm'][tld]['url'] + '/#/en/search-results.aspx?searchtype=quick&isNewSearch=true&mode=CD&keyword=')
@@ -451,7 +440,7 @@ for tld in ['au','hk','cn','de','fr','global','il','it','latin','pl','se','za','
 for tld in ['au','hk','cn','de','fr','global','il','it','latin','pl','se','za','es','nl','uk','us2','us1']:
     class Search_unippm_file(BaseAction):
         NAME = urls['unippm'][tld]['name']
-        MENU = 'Universal Publishing Production Music'
+        MENU = ['Search', 'Universal Publishing Production Music']
 
         def callback(self, objs, tld=tld):
             file_open_page(self, objs, urls['unippm'][tld]['url'] + '/#/en/search-results.aspx?searchtype=quick&isNewSearch=true&keyword=')
@@ -460,7 +449,7 @@ for tld in ['au','hk','cn','de','fr','global','il','it','latin','pl','se','za','
 
 for site in urls['generic']:
     class Search_generic(BaseAction):
-        MENU = "Search"
+        MENU = ['Search']
         NAME = site[0]
         def callback(self, objs, site = site):
             cbFunction = globals()[site[2] + '_open_page']
